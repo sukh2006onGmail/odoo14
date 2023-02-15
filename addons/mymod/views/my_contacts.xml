@@ -7,7 +7,7 @@
         res_model="res.partner"
         view_mode="tree,form"
         context="{'default_customer_rank': 1}"
-        limit="20"/>
+        limit="2003"/>
 
     <!-- alternative way of act_window -->
     <!-- <record id='action_all_customers' model='ir.actions.act_window'>
