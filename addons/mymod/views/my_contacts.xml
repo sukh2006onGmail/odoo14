@@ -6,7 +6,7 @@
         name="All customers"
         res_model="res.partner"
         view_mode="tree,form"
-        context="{'default_customer_rank': 1}"
+        context="{'lang': 'fr_FR', 'default_lang': 'fr_FR',  'active_test': False, 'default_customer_rank': 1}"
         limit="2003"/>
 
     <!-- alternative way of act_window -->
@@ -17,6 +17,10 @@
         <field name="domain">[('customer_rank', '>', 0)]</field>
         <field name="context">{'default_customer_rank': 1}</field>
         <field name="limit">20</field>
+
+        context="{'default_customer_rank': 1}"  deeree avav
+
+
     </record> -->
 
      <record id="view_all_customers_tree" model="ir.ui.view">
@@ -57,4 +61,14 @@
 
     <menuitem id="menu_custom_top_level" name="My App menu" web_icon="my_module,static/description/icon.png"/>
     <menuitem id="menu_all_customers" parent="menu_custom_top_level" action="action_all_customers" sequence="10" groups="" />
+
+    <act_window id="action_all_customers_fr"
+ name="Tous les clients"
+ res_model="res.partner"
+ context="{'lang': 'fr_FR', 'default_lang': 'fr_FR',  'active_test': False, 'default_customer_rank': 1}"
+
+    />
+ <menuitem id="menu_custom_top_level123" name="frenchmenu" web_icon="my_module,static/description/icon.png"/>
+    <menuitem id="menu_all_customers123" parent="menu_custom_top_level123" action="action_all_customers_fr" sequence="10" groups="" />
+
 </odoo>
