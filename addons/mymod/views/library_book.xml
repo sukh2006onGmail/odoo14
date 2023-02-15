@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<record id='library_book_action' model='ir.actions.act_window'>
+     <field name="name">Library Books</field>
+     <field name="res_model">library1.book1</field>
+     <field name="view_mode">tree,form,kanban</field>
+    </record>
+
+    <menuitem name="mylib menu" id="mylib_base_menu" />
+    <menuitem name="Books menu" id="mylib_book_menu" parent="mylib_base_menu" action="library_book_action"/>
+
+
+ <record id="library_book_view_form" model="ir.ui.view">
+     <field name="name">Library Book Form</field>
+     <field name="model">library1.book1</field>
+     <field name="arch" type="xml">
+     <form>
+         <button name="log_all_library_members" string="Log Members" type="object"/>
+     <group>
+     <group>
+        <field name="name"/>
+         <field name="date_release"/>
+         <field name="age_days"/>
+
+         <field name="publisher_id"/>
+         <field name="publisher_city"/>
+         <field name="ref_doc_id"/>
+          <field name="manager_remarks"/>
+     </group>
+     </group>
+
+
+     </form>
+     </field>
+    </record>
+
+
+        <!--   Add a custom tree (list) view -->
+<record id="library_book_view_tree" model="ir.ui.view">
+     <field name="name">Library Book List</field>
+     <field name="model">library1.book1</field>
+     <field name="arch" type="xml">
+
+     <tree>
+
+     <field name="name"/>
+     <field name="date_release"/>
+         <field name="ovog"/>
+         <field name="short_name"/>
+         <field name="age_days"/>
+         <field name="ref_doc_id"/>
+         <field name="manager_remarks"/>
+
+
+
+     </tree>
+     </field>
+    </record>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</odoo>

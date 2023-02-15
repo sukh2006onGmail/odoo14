@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--  Add the action that opens the views -->
+
+    <record id='library_book_action' model='ir.actions.act_window'>
+     <field name="name">Library Books</field>
+     <field name="res_model">library1.book1</field>
+     <field name="view_mode">tree,form</field>
+    </record>
+
+    <!--   Add the menu items -->
+    <menuitem name="My Lib menu" id="library_base_menu" />
+    <menuitem name="Books menu" id="library_book_menu" parent="library_base_menu" action="library_book_action"/>
+
+
+        <!--   Add a custom form view -->
+    <record id="library_book_view_form" model="ir.ui.view">
+     <field name="name">Library Book Form</field>
+     <field name="model">library1.book1</field>
+     <field name="arch" type="xml">
+     <form>
+         <button name="log_all_library_members" string="Log Members" type="object"/>
+         <button name="create_categories" string="Create Categories" type="object"/>
+         <button name="change_release_date" string="Update Date" type="object"/>
+         <button name="find_book" string="Find Book" type="object"/>
+         <button name="book_rent" string="Rent this book" type="object" class="btn-primary"/>
+         <button name="average_book_occupation" string="Log Average Occ." type="object" />
+     <group>
+     <group>
+        <field name="name"/>
+         <field name="date_release"/>
+         <field name="date_updated"/>
+         <field name="cover" widget="image" class="oe_avatar"/>
+        <field name="reader_rating"/>
+         <field name="pages"/>
+     </group>
+     <group>
+        <field name="short_name"/>
+         <field name="author_ids" widget="many2many_tags"/>
+         <field name="state"/>
+         <field name="pages"/>
+        <field name="notes"/>
+         <field name="description"/>
+         <field name="out_of_print"/>
+     </group>
+     </group>
+
+         <button name="make_available" string="Make Available" type="object"/>
+         <button name="make_borrowed" string="Make Borrowed" type="object"/>
+         <button name="make_lost" string="Make Lost" type="object"/>
+         <field name="state" widget="statusbar"/>
+
+     </form>
+     </field>
+    </record>
+
+
+        <!--   Add a custom tree (list) view -->
+<record id="library_book_view_tree" model="ir.ui.view">
+     <field name="name">Library Book List</field>
+     <field name="model">library1.book1</field>
+     <field name="arch" type="xml">
+
+     <tree>
+          <button name="find_book" string="Find Book" type="object"/>
+     <field name="name"/>
+     <field name="date_release"/>
+         <field name="ovog"/>
+         <field name="short_name"/>
+         <field name="age_days"/>
+
+         <field name="notes"/>
+         <field name="state"/>
+         <field name="description"/>
+         <field name="cover"/>
+         <field name="out_of_print"/>
+         <field name="date_updated"/>
+         <field name="pages"/>
+         <field name="reader_rating"/>
+     </tree>
+     </field>
+    </record>
+
+
+    <!--   Add custom Search options -->
+
+    <record id="library_book_view_search" model="ir.ui.view">
+     <field name="name">Library Book Search</field>
+     <field name="model">library1.book1</field>
+     <field name="arch" type="xml">
+     <search>
+     <field name="name"/>
+     <filter string="No Authors" name="without_author" domain="[('name','=','test')]"/>
+<!--         <filter string="No Authors" name="without_author" domain="[('author_ids','=',False)]"/>-->
+     </search>
+     </field>
+    </record>
+</odoo>

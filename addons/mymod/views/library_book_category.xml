@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+<!--  Add the action that opens the views -->
+
+    <record id='library_book_category_action' model='ir.actions.act_window'>
+     <field name="name">Library Books category</field>
+     <field name="res_model">library.book.category</field>
+     <field name="view_mode">tree,form</field>
+    </record>
+
+    <!--   Add the menu items -->
+    <menuitem name="Books category menu" id="library_book_category_menu" parent="mylib_base_menu" action="library_book_category_action"/>
+
+
+        <!--   Add a custom form view -->
+    <record id="library_book_category_view_form" model="ir.ui.view">
+     <field name="name">Library Book category Form</field>
+     <field name="model">library.book.category</field>
+     <field name="arch" type="xml">
+     <form>
+     <group>
+     <group>
+        <field name="name"/>
+     </group>
+     <group>
+         <field name="parent_id"/><field name="child_ids"/>
+
+     </group>
+     </group>
+     </form>
+     </field>
+    </record>
+
+
+        <!--   Add a custom tree (list) view -->
+<record id="library_book_category_view_tree" model="ir.ui.view">
+     <field name="name">Library Book category List</field>
+     <field name="model">library.book.category</field>
+     <field name="arch" type="xml">
+     <tree>
+     <field name="name"/>
+     </tree>
+     </field>
+    </record>
+
+
+
+</odoo>
