@@ -10,7 +10,7 @@ class LibraryBook_class(models.Model):
     _description = 'Library Book desc'
     _rec_name = 'short_name'
 
-    name = fields.Char('Title', required=True)
+    name = fields.Char('Title1235555', required=True)
     ovog = fields.Char('ovog')
     date_release = fields.Date('Release Date')
     # short_name = fields.Char('Short Title', required=True)
