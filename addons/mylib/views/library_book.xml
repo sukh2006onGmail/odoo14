@@ -8,16 +8,66 @@
         <form>
         <group>
         <group>
-        <field name="name"/>
-        <field name="author_ids"        widget="many2many_tags"/>
+            <field name="name"/>
+            <field name="short_name"/>
+            <field name="author_ids" widget="many2many_tags"/>
+            <field name="publisher_id" />
+            <field name="active"/>
+            <field name="cost_price"/>
+            <field name="publisher_city"/>
         </group>
         <group>
-        <field name="date_release"/>
+            <field name="date_release"/>
+             <field name="ovog"/>
+             <field name="lname"/>
+             <field name="fname"/>
+            <field name="cover" widget="image" class="oe_avatar"/>
+             <field name="age_days"/>
+            <field name="ref_doc_id"/>
         </group>
         </group>
         </form>
         </field>
 </record>
+
+    <record id="library_book_view_tree" model="ir.ui.view">
+        <field name="name">Library Book List</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+            <field name="short_name"/>
+            <field name="date_release"/>
+            <field name="active"/>
+            <field name="cost_price"/>
+            <field name="publisher_city"/>
+
+            <field name="ovog"/>
+             <field name="lname"/>
+             <field name="fname"/>
+             <field name="author_ids"/>
+            <field name="publisher_id" />
+            <field name="cover" widget="image" class="oe_avatar"/>
+            <field name="age_days"/>
+            <field name="ref_doc_id"/>
+
+        </tree>
+        </field>
+        </record>
+
+    <record id="library_book_view_search" model="ir.ui.view">
+        <field name="name">Library Book Search</field>
+        <field name="model">library.book</field>
+        <field name="arch" type="xml">
+        <search>
+            <field name="fname"/>
+            <field name="lname"/>
+            <field name="author_ids"/>
+             <field name="age_days"/>
+            <filter name="without_author" domain="[('author_ids','!=', False)]" string="No Authors" />
+        </search>
+        </field>
+        </record>
 
 
     <record id='library_book_action' model='ir.actions.act_window'>
@@ -25,11 +75,45 @@
         <field name="res_model">library.book</field>
         <field name="view_mode">tree,form</field>
         </record>
-
-
+     <record id='library_book_category_action' model='ir.actions.act_window'>
+        <field name="name">Library Books category</field>
+        <field name="res_model">library.book.category</field>
+        <field name="view_mode">tree,form</field>
+        </record>
 <menuitem name="My Library" id="library_base_menu" />
 <menuitem name="Books" id="library_book_menu" parent="library_base_menu" action="library_book_action"/>
+<menuitem name="category" id="library_book_category" parent="library_base_menu" action="library_book_category_action"/>
 
 
+    <record id="library_book_cat_view_form" model="ir.ui.view">
+        <field name="name">Library Book Form</field>
+        <field name="model">library.book.category</field>
+        <field name="arch" type="xml">
+        <form>
+        <group>
+        <group>
+            <field name="name"/>
+             <field name="parent_id"/>
+            <field name="child_ids" />
+        </group>
+        <group>
+
+        </group>
+        </group>
+        </form>
+        </field>
+</record>
+    <record id="library_book_cat_view_tree" model="ir.ui.view">
+        <field name="name">Library Book List</field>
+        <field name="model">library.book.category</field>
+        <field name="arch" type="xml">
+        <tree>
+            <field name="name"/>
+             <field name="parent_id"/>
+            <field name="child_ids" />
+
+        </tree>
+        </field>
+        </record>
 
 </odoo>
