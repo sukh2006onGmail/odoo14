@@ -7,7 +7,19 @@
         <field name="arch" type="xml">
         <form>
         <group>
+            <button name="book_rent" string="Rent this book" type="object" class="btn-primary"/>
+            <button name="make_available" string="Make Available" type="object"/>
+            <button name="make_borrowed" string="Make Borrowed" type="object"/>
+            <button name="make_lost" string="Make Lost" type="object"/>
+            <button name="log_all_library_members" string="Log Members" type="object"/>
+            <button name="change_release_date" string="Update Date" type="object"/>
+            <button name="find_book" string="serach" type="object"/>
+
+            <button name="filter_books" string="Filter Book " type="object"/>
+
+
         <group>
+            <field name="state" widget="statusbar"/>
             <field name="name"/>
             <field name="short_name"/>
             <field name="author_ids" widget="many2many_tags"/>
@@ -34,7 +46,9 @@
         <field name="name">Library Book List</field>
         <field name="model">library.book</field>
         <field name="arch" type="xml">
+
         <tree>
+
             <field name="name"/>
             <field name="short_name"/>
             <field name="date_release"/>
@@ -70,7 +84,7 @@
         </record>
 
 
-    <record id='library_book_action' model='ir.actions.act_window'>
+     <record id='library_book_action' model='ir.actions.act_window'>
         <field name="name">Library Books</field>
         <field name="res_model">library.book</field>
         <field name="view_mode">tree,form</field>
@@ -80,9 +94,25 @@
         <field name="res_model">library.book.category</field>
         <field name="view_mode">tree,form</field>
         </record>
+     <record id='library_member_action' model='ir.actions.act_window'>
+        <field name="name">Library Books category</field>
+        <field name="res_model">library.member</field>
+        <field name="view_mode">tree,form</field>
+        </record>
+    <record id='library_rent_action' model='ir.actions.act_window'>
+        <field name="name">Library rent category</field>
+        <field name="res_model">library.book.rent</field>
+        <field name="view_mode">tree,form</field>
+        </record>
+        <act_window id="action_wizard_rent_books" name="Give on Rent" res_model="library.rent.wizard" view_mode="form" target="new" />
 <menuitem name="My Library" id="library_base_menu" />
 <menuitem name="Books" id="library_book_menu" parent="library_base_menu" action="library_book_action"/>
 <menuitem name="category" id="library_book_category" parent="library_base_menu" action="library_book_category_action"/>
+<menuitem name="member" id="library_member" parent="library_base_menu" action="library_member_action"/>
+    <menuitem name="rent" id="library_rent" parent="library_base_menu" action="library_rent_action"/>
+    <menuitem id="menu_wizard_rent_books" parent="library_base_menu" action="action_wizard_rent_books" sequence="20" />
+
+
 
 
     <record id="library_book_cat_view_form" model="ir.ui.view">
@@ -91,6 +121,7 @@
         <field name="arch" type="xml">
         <form>
         <group>
+            <button name="create_categories" string="Create Categories" type="object"/>
         <group>
             <field name="name"/>
              <field name="parent_id"/>
@@ -107,6 +138,7 @@
         <field name="name">Library Book List</field>
         <field name="model">library.book.category</field>
         <field name="arch" type="xml">
+
         <tree>
             <field name="name"/>
              <field name="parent_id"/>
@@ -115,5 +147,70 @@
         </tree>
         </field>
         </record>
+
+     <record id="library_book_rent_view_form" model="ir.ui.view">
+        <field name="name">Library Book rent</field>
+        <field name="model">library.book.rent</field>
+        <field name="arch" type="xml">
+        <form>
+             <header>
+                    <button name="book_return" string="Return the Book" states="ongoing" type="object"/>
+                 <button name="book_lost" string="Lost the Book" states="ongoing" type="object"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+
+        <group>
+
+        <group>
+            <field name="book_id" domain="[('state', '=', 'available')]"/>
+             <field name="borrower_id"/>
+            <field name="state" widget="statusbar"/>
+            <field name="rent_date" />
+            <field name="return_date" />
+        </group>
+        <group>
+
+        </group>
+        </group>
+        </form>
+        </field>
+</record>
+    <record id="library_book_rent_view_tree" model="ir.ui.view">
+        <field name="name">Library Book rent List</field>
+        <field name="model">library.book.rent</field>
+        <field name="arch" type="xml">
+
+        <tree>
+            <field name="book_id"/>
+             <field name="borrower_id"/>
+            <field name="state" />
+            <field name="rent_date" />
+            <field name="return_date" />
+
+        </tree>
+        </field>
+        </record>
+
+
+    <record id='library_rent_wizard_form' model='ir.ui.view'>
+<field name='name'>library rent wizard form view</field>
+<field name='model'>library.rent.wizard</field>
+<field name='arch' type='xml'>
+<form string="Borrow books">
+    <sheet>
+    <group>
+    <field name='borrower_id'/>
+    </group>
+    <group>
+    <field name='book_ids' widget="many2many_tags"/>
+    </group>
+    </sheet>
+    <footer>
+    <button string='Rent' type='object' name='add_book_rents' class='btn-primary'/>
+    <button string='Cancel' class='btn-default' special='cancel'/>
+    </footer>
+</form>
+</field>
+</record>
 
 </odoo>
