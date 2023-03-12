@@ -5,6 +5,8 @@ acl_book_cat_librarian,library.book_cat_librarian,model_library_book_category,gr
 acl_book_mem_librarian,library.book_mem_librarian,model_library_member,group_librarian,1,1,1,1
 acl_book_rent_librarian,library.book_rent_librarian,model_library_book_rent,group_librarian,1,1,1,1
 acl_library_rent_wizard,library.library_rent_wizard,model_library_rent_wizard,group_librarian,1,1,1,1
+acl_library_retrun_wizard,library.library_return_wizard,model_library_return_wizard,group_librarian,1,1,1,1
+acl_book_rent_statistics_librarian,library.book_rent_librarian,model_library_book_rent_statistics,group_librarian,1,1,1,1
 
 
 

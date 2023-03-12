@@ -1,4 +1,4 @@
-from odoo import models, fields, api
+from odoo import models, fields, api, tools
 from datetime import timedelta
 
 from odoo.exceptions import UserError
@@ -6,6 +6,8 @@ from odoo.tools.translate import _
 
 import logging
 logger = logging.getLogger(__name__)
+
+from odoo.tests.common import Form
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -26,7 +28,7 @@ class LibraryBook(models.Model):
 
     name = fields.Char('Title', required=True, help='Total book page count')
     short_name = fields.Char('Short Title', required=True)
-    ovog = fields.Char('ovog')
+    ovog = fields.Char('ovog',  groups="base.group_multi_company")
     lname = fields.Char('lname')
     fname = fields.Char('fname')
     date_release = fields.Date('Release Date', groups='mylib.group_librarian')
@@ -213,7 +215,13 @@ class LibraryBook(models.Model):
         # public_book = self.env['library.book'].with_user(public_user)
         # public_book.search([('name', 'ilike', 'cookbook')])
 
-
+    def return_all_books(self):
+        self.ensure_one()
+        wizard = self.env['library.return.wizard']
+        with Form(wizard) as return_form:
+            return_form.borrower_id = self.env.user.partner_id
+            record = return_form.save()
+            record.books_returns()
 
 
 
@@ -284,11 +292,73 @@ class LibraryRentWizard(models.TransientModel):
                     'borrower_id': wiz.borrower_id.id,
                     'book_id': book.id
                 })
+        borrowers = self.mapped('borrower_id')
+        action = borrowers.get_formview_action()
+        if len(borrowers.ids) > 1:
+            action['domain'] = [('id', 'in', tuple(borrowers.ids))]
+        action['view_mode'] = 'tree,form'
+        return action
+
+class LibraryReturnWizard(models.TransientModel):
+        _name = 'library.return.wizard'
+        _description = "Lib return wizard"
+
+        borrower_id = fields.Many2one('res.partner', string='Member')
+        book_ids = fields.Many2many('library.book', string='Books')
+
+        def books_returns(self):
+            loanModel = self.env['library.book.rent']
+            for rec in self:
+                loans = loanModel.search(
+                    [('state', '=', 'ongoing'),
+                     ('book_id', 'in', rec.book_ids.ids),
+                     ('borrower_id', '=', rec.borrower_id.id)]
+                )
+                for loan in loans:
+                    loan.book_return()
+
+        @api.onchange('borrower_id')
+        def onchange_member(self):
+            rentModel = self.env['library.book.rent']
+            books_on_rent = rentModel.search(
+                [('state', '=', 'ongoing'),
+                 ('borrower_id', '=', self.borrower_id.id)]
+            )
+            self.book_ids = books_on_rent.mapped('book_id')
 
 
+class LibraryBookRentStatistics(models.Model):
+    _name = 'library.book.rent.statistics'
+    _auto = False
+
+    book_id = fields.Many2one('library.book', 'Book', readonly=True)
+    rent_count = fields.Integer(string="Times borrowed", readonly=True)
+    average_occupation = fields.Integer(string="Average Occupation (DAYS)", readonly=True)
+
+    def init(self):
+        tools.drop_view_if_exists(self.env.cr, self._table)
+        query = """
+        CREATE OR REPLACE VIEW library_book_rent_statistics AS (
+        SELECT
+                min(lbr.id) as id,
+                lbr.book_id as book_id,
+                count(lbr.id) as rent_count,
+                avg((EXTRACT(epoch from age(return_date, rent_date)) / 86400))::int as average_occupation
+            FROM
+                library_book_rent AS lbr
+            JOIN
+                library_book as lb ON lb.id = lbr.book_id
+            WHERE lbr.state = 'returned'
+            GROUP BY lbr.book_id
+        );
+        """
+        self.env.cr.execute(query)
 
 
+class ResConfigSettings(models.TransientModel):
+    _inherit = 'res.config.settings'
 
+    group_self_borrow = fields.Boolean(string="Self borrow", implied_group='mylib.group_self_borrow')
 
 
 
