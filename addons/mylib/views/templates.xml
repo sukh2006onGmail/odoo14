@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="show_website_info" inherit_id="website.show_website_info">
+        <xpath expr="//dl[@t-foreach='apps']" position="replace">
+        <table class="table">
+        <tr t-foreach="apps" t-as="app">
+        <th>
+        <a t-att-href="app.website">
+        <t t-esc="app.name" /></a>
+            </th>
+        <td><t t-esc="app.summary" /></td>
+            <td><t t-esc="app.summary" /></td>
+        </tr>
+        </table>
+        </xpath>
+</template>
+
+
+<template id="books">
+    <t t-call="website.layout">
+        <t t-foreach="[1, 2, 3, 4, 5]" t-as="num">
+<p><t t-esc="num"/></p>
+</t>
+        <div t-att-total="10 + 5 + 5"/><div total="20"></div>
+        <t t-foreach="['info', 'danger', 'warning']" t-as="color">
+            <div t-attf-class="alert alert-{{color}}">
+            Simple bootstrap alert
+            </div>
+        </t>
+
+        <div class="oe_structure">
+            <section class="pt32 pb32 bg-secondary oe_custom_bg">
+                <div class="container text-center">
+                    <h1> Editable text and supports drag and drop.</h1>
+                </div>
+            </section>
+        </div>
+
+        <div class="container">
+            <t t-foreach="books" t-as="book">
+                <div t-attf-class="card mt-3 #{'bg-info' if book_odd else ''}" >
+                    <div class="card-body" id="card_body">
+                        <h3 t-field="book.name"/>
+                        <t t-if="book.date_release">
+                            <div t-field="book.date_release" class="text-muted"/>
+                        </t>
+                        <b class="mt8"> Authors </b>
+                        <ul>
+                            <li t-foreach="book.author_ids" t-as="author">
+                                <span t-esc="author.name" />
+                            </li>
+                        </ul>
+                        <a t-attf-href="/books/#{book.id}" class="btn btn-primary btn-sm">
+                            <i class="fa fa-book"/> Book Detail
+                            </a>
+                    </div>
+                </div>
+            </t>
+        </div>
+
+        <section class="container mt16" contenteditable="False">
+            This is a non-editable text after the list of books.
+        </section>
+    </t>
+</template>
+
+
+   <template id="book_detail" name="Books Detail">
+    <t t-call="website.layout">
+        <div class="container">
+            <div class="row mt16">
+                <div class="col-5">
+                    <span t-field="book.image" t-options="{'widget': 'image', 'class': 'mx-auto d-block img-thumbnail'}"/>
+                </div>
+                <div class="offset-1 col-6">
+                    <h1 t-field="book.name"/>
+                    <t t-if="book.date_release">
+                        <div t-field="book.date_release" class="text-muted"/>
+                    </t>
+                    <b class="mt8"> Authors </b>
+                    <ul>
+                        <li t-foreach="book.author_ids" t-as="author">
+                            <span t-esc="author.name" />
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div t-field="book.html_description"/>
+    </t>
+</template>
+
+    <template id="books_issue_form" name="Book Issues Form">
+    <t t-call="website.layout">
+        <div class="container mt32">
+            <t t-if="submitted">
+                <h3 class="alert alert-success mt16 mb16">
+                    <i class="fa fa-thumbs-up"/>
+                    Book submitted successfully
+                </h3>
+                <h1> Report the another book issue </h1>
+            </t>
+            <t t-else="">
+                <h1> Report the book issue </h1>
+            </t>
+            <div class="row mt16">
+                <div class="col-6">
+                    <form method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        <div class="form-group">
+                            <label>Select Book</label>
+                            <select class="form-control" name="book_id">
+                                <t t-foreach="books" t-as="book">
+                                    <option t-att-value="book.id">
+                                        <t t-esc="book.name"/>
+                                    </option>
+                                </t>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Issue Description</label>
+                            <textarea name="issue_description" class="form-control" placeholder="e.g. pages are missing"/>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </t>
+</template>
+
+<!-- inheritance example -->
+<template id="books_ids_inh" inherit_id="mylib.books">
+    <xpath expr="//div[@id='card_body']/b" position="replace">
+        <b class="mt8"> Authors (<t t-esc="len(book.author_ids)"/>) </b>
+    </xpath>
+</template>
+
+    <template id="assets_frontend" inherit_id="web.assets_frontend">
+        <xpath expr="." position="inside">
+            <link href="/mylib/static/src/css/my_library.css" rel="stylesheet" type="text/css"/>
+            <link href="/mylib/static/src/scss/my_library.scss" rel="stylesheet" type="text/scss"/>
+            <script src="/mylib/static/src/js/my_library.js" type="text/javascript" />
+        </xpath>
+    </template>
+
+</odoo>

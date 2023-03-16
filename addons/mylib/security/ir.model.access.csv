@@ -7,6 +7,7 @@ acl_book_rent_librarian,library.book_rent_librarian,model_library_book_rent,grou
 acl_library_rent_wizard,library.library_rent_wizard,model_library_rent_wizard,group_librarian,1,1,1,1
 acl_library_retrun_wizard,library.library_return_wizard,model_library_return_wizard,group_librarian,1,1,1,1
 acl_book_rent_statistics_librarian,library.book_rent_librarian,model_library_book_rent_statistics,group_librarian,1,1,1,1
+acl_book_issues,library.book_issue,model_book_issue,group_librarian,1,1,1,1
 
 
 

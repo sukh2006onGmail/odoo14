@@ -7,7 +7,7 @@ from odoo.tools.translate import _
 import logging
 logger = logging.getLogger(__name__)
 
-from odoo.tests.common import Form
+# from odoo.tests.common import Form
 
 class ResPartner(models.Model):
     _inherit = 'res.partner'
@@ -52,6 +52,12 @@ class LibraryBook(models.Model):
     cover = fields.Binary('Book Cover')
     active = fields.Boolean('Active', default=True)
     cost_price = fields.Float('Book Cost', digits='book price')
+
+    image = fields.Binary(attachment=True)
+    html_description = fields.Html()
+
+    book_issue_id = fields.One2many('book.issue', 'book_id')
+
 
 
 
@@ -360,7 +366,12 @@ class ResConfigSettings(models.TransientModel):
 
     group_self_borrow = fields.Boolean(string="Self borrow", implied_group='mylib.group_self_borrow')
 
+class LibraryBookIssues(models.Model):
+    _name = 'book.issue'
 
+    book_id = fields.Many2one('library.book', required=True)
+    submitted_by = fields.Many2one('res.users')
+    issue_description = fields.Text()
 
 
 

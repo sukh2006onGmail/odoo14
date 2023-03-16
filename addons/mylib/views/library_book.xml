@@ -5,23 +5,31 @@
         <field name="name">Library Book Form</field>
         <field name="model">library.book</field>
         <field name="arch" type="xml">
-        <form delete="false" edit="false" create="false">
+        <form >
 
-             <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>
+<!--             <widget name="web_ribbon" title="Archived" bg_color="bg-danger" attrs="{'invisible': [('active', '=', True)]}"/>-->
         <group>
-            <button type="action" name="mylib.action_wizard_rent_books" string="Open partner categories"/>
-            <button name="book_rent" string="Rent this book" type="object" class="oe_link"/>
-            <button name="make_available" string="Make Available" type="object"/>
-            <button name="make_borrowed" string="Make Borrowed" type="object"/>
-            <button name="make_lost" string="Make Lost" type="object"/>
-            <button name="log_all_library_members" string="Log Members" type="object"/>
-            <button name="change_release_date" string="Update Date" type="object"/>
-            <button name="find_book" string="serach" type="object"/>
+<!--            <button type="action" name="mylib.action_wizard_rent_books" string="Open partner categories"/>-->
+<!--            <button name="book_rent" string="Rent this book" type="object" class="oe_link"/>-->
+<!--            <button name="make_available" string="Make Available" type="object"/>-->
+<!--            <button name="make_borrowed" string="Make Borrowed" type="object"/>-->
+<!--            <button name="make_lost" string="Make Lost" type="object"/>e-->
+<!--            <button name="log_all_library_members" string="Log Members" type="object"/>-->
+<!--            <button name="change_release_date" string="Update Date" type="object"/>-->
+<!--            <button name="find_book" string="serach" type="object"/>-->
 
-            <button name="filter_books" string="Filter Book " type="object"/>
-            <button name="return_all_books" string="Return all book" type="object" class="btn-primary"/>
+<!--            <button name="filter_books" string="Filter Book " type="object"/>-->
+<!--            <button name="return_all_books" string="Return all book" type="object" class="btn-primary"/>-->
 
-
+<group string="Book Issues">
+<field name="book_issue_id" nolabel="1">
+<tree>
+<field name="create_date"/>
+<field name="submitted_by"/>books/submit_issues
+    <field name="issue_description"/>
+</tree>
+</field>
+</group>
         <group>
             <field name="state" widget="statusbar"/>
             <field name="name"  groups="base.group_multi_company" />
@@ -40,6 +48,10 @@
             <field name="cover" widget="image" class="oe_avatar"/>
              <field name="age_days"/>
             <field name="ref_doc_id"/>
+
+             <field name="image" widget="image" class="oe_avatar"/>
+            <field name="html_description"/>
+
         </group>
         </group>
         </form>
@@ -68,6 +80,9 @@
             <field name="cover" widget="image" class="oe_avatar"/>
             <field name="age_days"/>
             <field name="ref_doc_id"/>
+
+            <field name="image" widget="image" class="oe_avatar"/>
+            <field name="html_description"/>
 
         </tree>
         </field>
